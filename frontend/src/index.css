@@ -1,0 +1,185 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --surface: oklch(98.4% 0.005 70);
+    --surface-raised: oklch(100% 0 0);
+    --surface-sunken: oklch(96% 0.006 65);
+    --ink: oklch(18% 0.012 50);
+    --muted: oklch(40% 0.012 60);
+    --line: oklch(92% 0.006 60);
+    --accent: oklch(48% 0.14 38);
+    --accent-soft: oklch(94% 0.04 50);
+    --accent-ink: oklch(98% 0.02 60);
+
+    color-scheme: light;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    background: var(--surface);
+    color: var(--ink);
+    font-family: theme("fontFamily.sans");
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: color-mix(in oklch, var(--accent) 30%, transparent);
+    color: var(--ink);
+  }
+
+  *:focus-visible {
+    outline: none;
+    box-shadow: theme("boxShadow.focus");
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  .eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-eyebrow text-muted;
+  }
+
+  .rule {
+    @apply h-px w-full;
+    background: var(--line);
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-[10px] px-4 py-2.5 text-sm font-medium transition-[transform,background,color,border-color] duration-150 ease-[cubic-bezier(0.2,0.8,0.2,1)] disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn text-[color:var(--accent-ink)];
+    background: var(--ink);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: oklch(from var(--ink) calc(l + 0.08) c h);
+  }
+  .btn-primary:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  .btn-accent {
+    @apply btn text-[color:var(--accent-ink)];
+    background: var(--accent);
+  }
+  .btn-accent:hover:not(:disabled) {
+    background: oklch(from var(--accent) calc(l + 0.05) c h);
+  }
+
+  .btn-ghost {
+    @apply btn text-ink;
+    background: transparent;
+  }
+  .btn-ghost:hover:not(:disabled) {
+    background: var(--surface-sunken);
+  }
+
+  .btn-outline {
+    @apply btn text-ink;
+    background: var(--surface-raised);
+    border: 1px solid var(--line);
+  }
+  .btn-outline:hover:not(:disabled) {
+    background: var(--surface-sunken);
+  }
+
+  .input {
+    @apply w-full rounded-[10px] px-3 py-2.5 text-sm text-ink placeholder:text-muted;
+    background: var(--surface-raised);
+    border: 1px solid var(--line);
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+  .input:hover {
+    border-color: oklch(from var(--line) calc(l - 0.06) c h);
+  }
+  .input:focus-visible {
+    border-color: var(--ink);
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium text-ink;
+    background: var(--surface-sunken);
+    border: 1px solid var(--line);
+  }
+
+  .chip-mono {
+    @apply chip font-mono uppercase tracking-eyebrow text-[10px];
+  }
+
+  .panel {
+    @apply rounded-xl;
+    background: var(--surface-raised);
+    border: 1px solid var(--line);
+  }
+
+  .underline-link {
+    @apply text-ink underline decoration-1 underline-offset-[6px];
+    text-decoration-color: color-mix(in oklch, var(--ink) 25%, transparent);
+    transition: text-decoration-color 150ms ease;
+  }
+  .underline-link:hover {
+    text-decoration-color: var(--ink);
+  }
+
+  /* Hide scrollbar styling on horizontal scroll regions while keeping accessibility */
+  .scroll-fade {
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 16px,
+      #000 calc(100% - 16px),
+      transparent
+    );
+  }
+
+  /* Discreet vertical scrollbar — Firefox + WebKit. */
+  .scroll-soft {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+  }
+  .scroll-soft::-webkit-scrollbar {
+    width: 8px;
+  }
+  .scroll-soft::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scroll-soft::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 4px;
+  }
+  .scroll-soft::-webkit-scrollbar-thumb:hover {
+    background: var(--muted);
+  }
+}
+
+@layer utilities {
+  .grid-stack {
+    display: grid;
+    grid-template-areas: "stack";
+  }
+  .grid-stack > * {
+    grid-area: stack;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
